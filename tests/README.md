@@ -104,13 +104,13 @@ Below are the results of running this benchmark with the `gpt-4o-mini` model:
 ```
 goos: linux
 goarch: amd64
-pkg: github.com/MegaGrindStone/go-light-rag/tests
+pkg: github.com/lollipopkit/go-light-rag/tests
 cpu: Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz
 BenchmarkRAGSystems/christmascarol-8         	       1	158226631759 ns/op	      2706 01_Light_ms/query	      1163 02_Naive_ms/query	       100.0 03_Light_win%	         0 04_Naive_win%	       100.0 05_Light_comp_win%	         0 06_Naive_comp_win%	        50.00 07_Light_div_win%	        50.00 08_Naive_div_win%	       100.0 09_Light_emp_win%	         0 10_Naive_emp_win%	     30974 11_Light_tokens/query	      6332 12_Naive_tokens/query
 BenchmarkRAGSystems/relativity-8             	       1	173939083846 ns/op	      3127 01_Light_ms/query	       837.5 02_Naive_ms/query	        83.33 03_Light_win%	        16.67 04_Naive_win%	        83.33 05_Light_comp_win%	        16.67 06_Naive_comp_win%	        33.33 07_Light_div_win%	        66.67 08_Naive_div_win%	        83.33 09_Light_emp_win%	        16.67 10_Naive_emp_win%	     26364 11_Light_tokens/query	      6327 12_Naive_tokens/query
 BenchmarkRAGSystems/prophet-8                	       1	136281591193 ns/op	      2705 01_Light_ms/query	       904.5 02_Naive_ms/query	        50.00 03_Light_win%	        50.00 04_Naive_win%	        66.67 05_Light_comp_win%	        33.33 06_Naive_comp_win%	         0 07_Light_div_win%	       100.0 08_Naive_div_win%	        50.00 09_Light_emp_win%	        50.00 10_Naive_emp_win%	     15801 11_Light_tokens/query	      6331 12_Naive_tokens/query
 PASS
-ok  	github.com/MegaGrindStone/go-light-rag/tests	468.711s
+ok  	github.com/lollipopkit/go-light-rag/tests	468.711s
 ```
 
 ### Understanding the Metrics

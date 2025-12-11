@@ -1,4 +1,4 @@
-module github.com/MegaGrindStone/go-light-rag
+module github.com/lollipopkit/go-light-rag
 
 go 1.24.9
 

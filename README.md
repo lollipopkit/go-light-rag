@@ -1,8 +1,8 @@
 # go-light-rag
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/MegaGrindStone/go-light-rag.svg)](https://pkg.go.dev/github.com/MegaGrindStone/go-light-rag)
-![CI](https://github.com/MegaGrindStone/go-light-rag/actions/workflows/ci.yaml/badge.svg)
-[![Go Report Card](https://goreportcard.com/badge/github.com/MegaGrindStone/go-light-rag)](https://goreportcard.com/report/github.com/MegaGrindStone/go-light-rag)
+[![Go Reference](https://pkg.go.dev/badge/github.com/lollipopkit/go-light-rag.svg)](https://pkg.go.dev/github.com/lollipopkit/go-light-rag)
+![CI](https://github.com/lollipopkit/go-light-rag/actions/workflows/ci.yaml/badge.svg)
+[![Go Report Card](https://goreportcard.com/badge/github.com/lollipopkit/go-light-rag)](https://goreportcard.com/report/github.com/lollipopkit/go-light-rag)
 [![codecov](https://codecov.io/gh/MegaGrindStone/go-light-rag/branch/main/graph/badge.svg)](https://codecov.io/gh/MegaGrindStone/go-light-rag)
 
 
