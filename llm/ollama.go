@@ -104,7 +104,7 @@ func (o Ollama) chatRequest(messages []api.Message) api.ChatRequest {
 		opts["min_p"] = *o.params.MinP
 	}
 	if o.params.IncludeReasoning != nil {
-		req.Think = o.params.IncludeReasoning
+		req.Think = &api.ThinkValue{Value: *o.params.IncludeReasoning}
 	}
 
 	req.Options = opts
