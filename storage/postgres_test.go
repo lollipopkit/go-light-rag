@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
-	golightrag "github.com/MegaGrindStone/go-light-rag"
+	golightrag "github.com/lollipopkit/go-light-rag"
 )
 
 func TestNewPostgresWithDB(t *testing.T) {

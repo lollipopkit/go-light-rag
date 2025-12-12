@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	golightrag "github.com/MegaGrindStone/go-light-rag"
-	"github.com/MegaGrindStone/go-light-rag/internal"
+	golightrag "github.com/lollipopkit/go-light-rag"
+	"github.com/lollipopkit/go-light-rag/internal"
 )
 
 // Default implements both DocumentHandler and QueryHandler interfaces for RAG operations.

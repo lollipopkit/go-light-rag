@@ -1,6 +1,6 @@
 package handler
 
-import golightrag "github.com/MegaGrindStone/go-light-rag"
+import golightrag "github.com/lollipopkit/go-light-rag"
 
 //nolint:lll
 const defaultEntityExtractionGoal = `

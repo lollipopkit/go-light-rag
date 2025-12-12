@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	golightrag "github.com/MegaGrindStone/go-light-rag"
+	golightrag "github.com/lollipopkit/go-light-rag"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/pgvector/pgvector-go"
 )

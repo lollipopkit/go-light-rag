@@ -7,8 +7,8 @@ import (
 	"go/token"
 	"strings"
 
-	golightrag "github.com/MegaGrindStone/go-light-rag"
-	"github.com/MegaGrindStone/go-light-rag/internal"
+	golightrag "github.com/lollipopkit/go-light-rag"
+	"github.com/lollipopkit/go-light-rag/internal"
 )
 
 // Go implements specialized document handling for Go source code.

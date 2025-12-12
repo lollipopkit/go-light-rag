@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	golightrag "github.com/MegaGrindStone/go-light-rag"
+	golightrag "github.com/lollipopkit/go-light-rag"
 )
 
 type MockDocumentHandler struct {

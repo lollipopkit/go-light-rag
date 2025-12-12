@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	golightrag "github.com/MegaGrindStone/go-light-rag"
-	"github.com/MegaGrindStone/go-light-rag/internal"
+	golightrag "github.com/lollipopkit/go-light-rag"
+	"github.com/lollipopkit/go-light-rag/internal"
 )
 
 // Semantic implements document handling with semantically meaningful chunking.

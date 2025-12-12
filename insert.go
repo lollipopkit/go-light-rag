@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MegaGrindStone/go-light-rag/internal"
+	"github.com/lollipopkit/go-light-rag/internal"
 	"golang.org/x/sync/errgroup"
 )
 

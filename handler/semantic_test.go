@@ -6,9 +6,9 @@ import (
 	"strings"
 	"testing"
 
-	golightrag "github.com/MegaGrindStone/go-light-rag"
-	"github.com/MegaGrindStone/go-light-rag/handler"
-	"github.com/MegaGrindStone/go-light-rag/internal"
+	golightrag "github.com/lollipopkit/go-light-rag"
+	"github.com/lollipopkit/go-light-rag/handler"
+	"github.com/lollipopkit/go-light-rag/internal"
 )
 
 type mockLLM struct {

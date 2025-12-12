@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	golightrag "github.com/MegaGrindStone/go-light-rag"
+	golightrag "github.com/lollipopkit/go-light-rag"
 )
 
 //nolint:gocognit,gocyclo,cyclop // Ignore complexity for this test
