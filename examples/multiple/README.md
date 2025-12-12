@@ -6,7 +6,9 @@ This example demonstrates how to use the `go-light-rag` library to build a RAG s
 
 Before running this example, you'll need:
 
-- A graph database (Neo4J or MemGraph)
+- Either:
+  - A graph database (Neo4J or MemGraph) + local files (`vec.db`, `kv.db`), or
+  - PostgreSQL with `pgvector` enabled (single-database mode)
 - An OpenAI API key
 - A directory of text/code files for processing
 
@@ -27,6 +29,8 @@ Choose one of these options:
 - Self-host a compatible graph database like [MemGraph](https://memgraph.com/)
 
 Make note of your graph database URI, username, and password.
+
+**PostgreSQL alternative:** set `postgres_conn_string` in `config.yaml` to use PostgreSQL (with `pgvector`) as the only storage backend. In this mode, Neo4J/ChromeM/Bolt are not used for RAG storage.
 
 ### 3. Get OpenAI API Key
 

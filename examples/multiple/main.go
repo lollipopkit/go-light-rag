@@ -14,11 +14,11 @@ import (
 	"text/template"
 	"time"
 
+	"github.com/cespare/xxhash"
 	golightrag "github.com/lollipopkit/go-light-rag"
 	"github.com/lollipopkit/go-light-rag/handler"
 	"github.com/lollipopkit/go-light-rag/llm"
 	"github.com/lollipopkit/go-light-rag/storage"
-	"github.com/cespare/xxhash"
 	"github.com/philippgille/chromem-go"
 	ignore "github.com/sabhiram/go-gitignore"
 	bolt "go.etcd.io/bbolt"
@@ -32,6 +32,10 @@ type config struct {
 
 	OpenAIAPIKey string `yaml:"openai_api_key"`
 	OpenAIModel  string `yaml:"openai_model"`
+
+	PostgresConnString string `yaml:"postgres_conn_string"`
+	VectorDim          int    `yaml:"vector_dim"`
+	TopK               int    `yaml:"top_k"`
 
 	LogLevel string `yaml:"log_level"`
 	DocsDir  string `yaml:"docs_dir"`
@@ -127,38 +131,7 @@ func main() {
 		Default: defaultHandler,
 	}
 
-	graphDB, err := storage.NewNeo4J(cfg.Neo4JURI, cfg.Neo4JUser, cfg.Neo4JPassword)
-	if err != nil {
-		log.Printf("Error creating neo4jDB: %v\n", err)
-		return
-	}
-	defer func() {
-		closeCtx, closeCancel := context.WithTimeout(context.Background(), time.Second*30)
-		defer closeCancel()
-
-		if err := graphDB.Close(closeCtx); err != nil {
-			log.Printf("Error closing neo4jDB: %v\n", err)
-		}
-	}()
-
-	vecDB, err := storage.NewChromem("vec.db", 5,
-		storage.EmbeddingFunc(chromem.NewEmbeddingFuncOpenAI(cfg.OpenAIAPIKey, chromem.EmbeddingModelOpenAI3Large)))
-	if err != nil {
-		log.Printf("Error creating chromemDB: %v\n", err)
-		return
-	}
-
-	kvDB, err := storage.NewBolt("kv.db")
-	if err != nil {
-		log.Printf("Error creating boltDB: %v\n", err)
-		return
-	}
-
-	// Ensure hash bucket exists
-	if err := createHashBucket(kvDB); err != nil {
-		log.Printf("Error creating hash bucket: %v\n", err)
-		return
-	}
+	usePostgres := strings.TrimSpace(cfg.PostgresConnString) != ""
 
 	// Set log level based on configuration
 	logLevel := slog.LevelInfo
@@ -181,14 +154,83 @@ func main() {
 		Temperature: &temp,
 	}, logger)
 
-	store := storageWrapper{
-		Bolt:    kvDB,
-		Chromem: vecDB,
-		Neo4J:   graphDB,
+	var (
+		store  golightrag.Storage
+		hashDB storage.Bolt
+	)
+
+	if usePostgres {
+		vectorDim := cfg.VectorDim
+		if vectorDim <= 0 {
+			vectorDim = 3072
+		}
+		topK := cfg.TopK
+		if topK <= 0 {
+			topK = 5
+		}
+
+		pgStore, err := storage.NewPostgres(
+			cfg.PostgresConnString,
+			vectorDim,
+			topK,
+			storage.EmbeddingFunc(chromem.NewEmbeddingFuncOpenAI(cfg.OpenAIAPIKey, chromem.EmbeddingModelOpenAI3Large)),
+		)
+		if err != nil {
+			log.Printf("Error creating postgresDB: %v\n", err)
+			return
+		}
+		defer pgStore.DB.Close()
+
+		hashDB, err = storage.NewBolt("hash.db")
+		if err != nil {
+			log.Printf("Error creating hash boltDB: %v\n", err)
+			return
+		}
+
+		store = pgStore
+	} else {
+		graphDB, err := storage.NewNeo4J(cfg.Neo4JURI, cfg.Neo4JUser, cfg.Neo4JPassword)
+		if err != nil {
+			log.Printf("Error creating neo4jDB: %v\n", err)
+			return
+		}
+		defer func() {
+			closeCtx, closeCancel := context.WithTimeout(context.Background(), time.Second*30)
+			defer closeCancel()
+
+			if err := graphDB.Close(closeCtx); err != nil {
+				log.Printf("Error closing neo4jDB: %v\n", err)
+			}
+		}()
+
+		vecDB, err := storage.NewChromem("vec.db", 5,
+			storage.EmbeddingFunc(chromem.NewEmbeddingFuncOpenAI(cfg.OpenAIAPIKey, chromem.EmbeddingModelOpenAI3Large)))
+		if err != nil {
+			log.Printf("Error creating chromemDB: %v\n", err)
+			return
+		}
+
+		kvDB, err := storage.NewBolt("kv.db")
+		if err != nil {
+			log.Printf("Error creating boltDB: %v\n", err)
+			return
+		}
+
+		store = storageWrapper{
+			Bolt:    kvDB,
+			Chromem: vecDB,
+			Neo4J:   graphDB,
+		}
+		hashDB = kvDB
+	}
+
+	if err := createHashBucket(hashDB); err != nil {
+		log.Printf("Error creating hash bucket: %v\n", err)
+		return
 	}
 
 	// Process all files in the directory
-	if err := processDocumentDirectory(cfg.DocsDir, kvDB, store, defaultHandler, goHandler, openAI, logger); err != nil {
+	if err := processDocumentDirectory(cfg.DocsDir, hashDB, store, defaultHandler, goHandler, openAI, logger); err != nil {
 		log.Printf("Error processing document directory: %v\n", err)
 		return
 	}

@@ -52,6 +52,7 @@ The library defines three storage interfaces:
 - GraphStorage: [Neo4j](https://github.com/neo4j/neo4j-go-driver) (and any compatible graph database)
 - VectorStorage: [ChromeM](https://github.com/philippgille/chromem-go), [Milvus](https://github.com/milvus-io/milvus)
 - KeyValueStorage: [BoltDB](https://github.com/etcd-io/bbolt), [Redis](https://github.com/redis/go-redis)
+- All-in-one Storage: PostgreSQL (Graph + KV + Vector) via [pgvector](https://github.com/pgvector/pgvector)
 
 You can implement any of these interfaces to use different storage solutions.
 
@@ -119,6 +120,23 @@ doc := golightrag.Document{
 }
 
 err := golightrag.Insert(doc, handler, store, llm, logger)
+```
+
+### Using PostgreSQL (pgvector) as the Only Storage
+
+If you want a single database for Graph + Vector + Source chunks, use `storage.NewPostgres`.
+
+```go
+embeddingFunc := storage.EmbeddingFunc(chromem.NewEmbeddingFuncOpenAI(apiKey, chromem.EmbeddingModelOpenAI3Large))
+vectorDim := 3072 // Must match the embedding output dimension
+
+store, err := storage.NewPostgres(os.Getenv("POSTGRES_DSN"), vectorDim, 5, embeddingFunc)
+if err != nil {
+    log.Fatalf("create postgres store: %v", err)
+}
+defer store.DB.Close()
+
+err = golightrag.Insert(doc, handler, store, llm, logger)
 ```
 
 ### Query Processing
